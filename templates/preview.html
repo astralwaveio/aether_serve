@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+
+{% block title %}预览 {{ file_name }} - AetherServe{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4><i class="fas fa-file-alt me-2"></i>预览文件: {{ file_name }}</h4>
+    <div>
+        <button class="btn btn-sm btn-outline-info me-2 copy-path-btn" data-path="{{ file_path }}" data-base-url="{{ base_url }}">
+            <i class="fas fa-copy me-1"></i>复制完整路径
+        </button>
+        <button class="btn btn-primary me-2" id="copyContentBtn" data-content="{{ content }}">
+            <i class="fas fa-copy me-1"></i>复制内容
+        </button>
+        <a href="{{ url_for('download_file', file_path=file_path) }}" class="btn btn-success">
+            <i class="fas fa-download me-1"></i>下载文件
+        </a>
+    </div>
+</div>
+
+{% if is_truncated %}
+<div class="alert alert-warning" role="alert">
+    <i class="fas fa-exclamation-triangle me-2"></i>文件过大 ({{ (file_size / 1024 / 1024) | round(2) }} MB)，仅显示部分内容。请下载查看完整内容。
+</div>
+{% endif %}
+
+<div class="card mb-4">
+    <div class="card-body bg-light">
+        <pre><code class="language-{{ file_path.split('.')[-1] }}">{{ content }}</code></pre>
+    </div>
+</div>
+
+<div id="copy-success-toast" class="toast align-items-center text-white bg-success border-0 position-fixed bottom-0 end-0 m-3" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+        <div class="toast-body">
+            已复制到剪贴板！
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    // 确保 Prism.js 在 DOM 加载后高亮代码
+    document.addEventListener('DOMContentLoaded', (event) => {
+        Prism.highlightAll();
+    });
+
+    // 复制内容按钮事件
+    document.getElementById('copyContentBtn').addEventListener('click', function() {
+        const contentToCopy = this.getAttribute('data-content');
+        copyToClipboard(contentToCopy); // 使用通用的复制函数
+    });
+
+    // 复制到剪贴板的通用函数 (这里为了避免重复定义，实际应该在 main.js 中定义并全局可用)
+    // 但为了本页面的独立性，这里再次定义或确保 main.js 已加载
+    function copyToClipboard(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed'; // 防止滚动
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            showToast('已复制到剪贴板！');
+        } catch (err) {
+            console.error('无法复制文本: ', err);
+            // 可以显示一个错误提示
+        }
+        document.body.removeChild(textarea);
+    }
+
+    // 显示 Toast 提示
+    function showToast(message) {
+        const toastEl = document.getElementById('copy-success-toast');
+        if (toastEl) {
+            const toastBody = toastEl.querySelector('.toast-body');
+            toastBody.textContent = message;
+            const toast = new bootstrap.Toast(toastEl);
+            toast.show();
+        }
+    }
+</script>
+{% endblock %}
