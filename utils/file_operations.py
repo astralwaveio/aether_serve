@@ -2,7 +2,9 @@ import os
 import stat
 from datetime import datetime
 from flask import current_app
-import magic # Import the python-magic library
+import magic
+import fnmatch
+
 
 def _get_absolute_path(relative_path):
     """
@@ -23,6 +25,7 @@ def _get_absolute_path(relative_path):
 
     return absolute_path
 
+
 def list_directory(relative_path):
     """
     列出指定相对路径下的文件和文件夹。
@@ -34,7 +37,19 @@ def list_directory(relative_path):
             raise FileNotFoundError(f"Directory not found: {relative_path}")
 
         items = []
+        hidden_patterns = current_app.config.get('HIDDEN_ITEMS', [])  # 获取隐藏模式列表
+
         for item_name in os.listdir(absolute_path):
+            # 检查是否需要隐藏该项
+            is_hidden = False
+            for pattern in hidden_patterns:
+                if fnmatch.fnmatch(item_name, pattern):
+                    is_hidden = True
+                    break
+
+            if is_hidden:
+                continue  # 跳过隐藏项
+
             item_path = os.path.join(absolute_path, item_name)
             item_relative_path = os.path.join(relative_path, item_name)
             try:
@@ -46,12 +61,12 @@ def list_directory(relative_path):
 
                 items.append({
                     'name': item_name,
-                    'path': item_relative_path, # 用于前端链接
+                    'path': item_relative_path,  # 用于前端链接
                     'is_dir': is_dir,
                     'size': size,
                     'modified_time': modified_time.strftime('%Y-%m-%d %H:%M:%S'),
-                    'is_text': is_text_file(item_relative_path) if not is_dir else False, # 新增：是否为文本文件
-                    'is_image': is_image_file(item_relative_path) if not is_dir else False # 新增：是否为图片文件
+                    'is_text': is_text_file(item_relative_path) if not is_dir else False,  # 新增：是否为文本文件
+                    'is_image': is_image_file(item_relative_path) if not is_dir else False  # 新增：是否为图片文件
                 })
             except OSError:
                 # 忽略无法访问的文件或目录（例如权限问题）
@@ -71,6 +86,7 @@ def list_directory(relative_path):
         current_app.logger.error(f"Error listing directory {relative_path}: {e}")
         raise Exception("Failed to list directory.")
 
+
 def read_text_file(relative_path):
     """
     读取指定相对路径的文本文件内容。
@@ -87,15 +103,15 @@ def read_text_file(relative_path):
         content = ""
 
         # 检查文件是否是可预览的文本文件类型
-        if not is_text_file(relative_path): # 使用新的 is_text_file
-            return "", False # 不是可预览的文本文件
+        if not is_text_file(relative_path):  # 使用新的 is_text_file
+            return "", False  # 不是可预览的文本文件
 
         # 处理大文件
         if file_size > max_preview_size:
             is_truncated = True
             # 读取文件开头的一部分
             with open(absolute_path, 'r', encoding='utf-8', errors='ignore') as f:
-                content = f.read(max_preview_size) # 读取指定字节数
+                content = f.read(max_preview_size)  # 读取指定字节数
         else:
             # 读取整个文件
             with open(absolute_path, 'r', encoding='utf-8', errors='ignore') as f:
@@ -111,6 +127,7 @@ def read_text_file(relative_path):
     except Exception as e:
         current_app.logger.error(f"Error reading file {relative_path}: {e}")
         raise Exception("Failed to read file.")
+
 
 def get_file_info(relative_path):
     """
@@ -142,6 +159,7 @@ def get_file_info(relative_path):
         current_app.logger.error(f"Error getting info for {relative_path}: {e}")
         raise Exception("Failed to get file info.")
 
+
 def _get_mime_type(absolute_path):
     """
     使用 python-magic 获取文件的 MIME 类型。
@@ -152,6 +170,7 @@ def _get_mime_type(absolute_path):
         current_app.logger.debug(f"python-magic failed for {absolute_path}: {e}")
         return None
 
+
 def is_text_file(relative_path):
     """
     判断文件是否是可预览的文本文件。
@@ -160,25 +179,26 @@ def is_text_file(relative_path):
     absolute_path = _get_absolute_path(relative_path)
 
     if not os.path.isfile(absolute_path):
-        return False # 不是文件，所以不是文本文件。
+        return False  # 不是文件，所以不是文本文件。
 
     mime_type = _get_mime_type(absolute_path)
     if mime_type:
         # 常见文本 MIME 类型
         if mime_type.startswith('text/') or \
-           mime_type in ['application/json', 'application/javascript', 'application/xml',
-                         'application/x-sh', 'application/x-python', 'application/x-php',
-                         'application/x-java', 'application/sql', 'application/yaml',
-                         'application/x-yaml', 'application/x-perl', 'application/x-ruby',
-                         'application/x-go', 'application/x-swift', 'application/typescript',
-                         'application/x-powershell', 'application/x-bat', 'application/csv',
-                         'application/vnd.ms-excel', # 对于某些CSV/TSV文件，可能被识别为excel
-                        ]:
+                mime_type in ['application/json', 'application/javascript', 'application/xml',
+                              'application/x-sh', 'application/x-python', 'application/x-php',
+                              'application/x-java', 'application/sql', 'application/yaml',
+                              'application/x-yaml', 'application/x-perl', 'application/x-ruby',
+                              'application/x-go', 'application/x-swift', 'application/typescript',
+                              'application/x-powershell', 'application/x-bat', 'application/csv',
+                              'application/vnd.ms-excel',  # 对于某些CSV/TSV文件，可能被识别为excel
+                              ]:
             return True
 
     # 回退到扩展名检查
     file_extension = os.path.splitext(relative_path)[1].lower()
     return file_extension in current_app.config['TEXT_FILE_EXTENSIONS']
+
 
 def is_image_file(relative_path):
     """
@@ -188,7 +208,7 @@ def is_image_file(relative_path):
     absolute_path = _get_absolute_path(relative_path)
 
     if not os.path.isfile(absolute_path):
-        return False # 不是文件，所以不是图片文件。
+        return False
 
     mime_type = _get_mime_type(absolute_path)
     if mime_type:
