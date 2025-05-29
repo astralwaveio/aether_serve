@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 绑定所有“复制链接”按钮的点击事件
+    // 绑定所有“复制”按钮的点击事件
     // 注意：类名从 copy-path-btn 更改为 copy-link-btn
     document.querySelectorAll('.copy-link-btn').forEach(button => {
         button.addEventListener('click', function() {
