@@ -50,6 +50,11 @@ class Config:
         '.hidden*',
         'hidden_*',
         '.DS_Store',
+        'iOS.conf',
+        'iOS-Test.conf',
+        'macOS.conf',
+        'Surfboard-Pro.conf',
+        'Surfboard-Test.conf',
     ]
 
     if not os.path.exists(FILE_SERVER_ROOT_DIR):
