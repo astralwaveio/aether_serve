@@ -1,0 +1,37 @@
+[Unit]
+# 服务的描述
+Description=用于服务 AetherServe 的 Gunicorn 实例
+# 在 network.target 之后启动 (确保网络已就绪)
+After=network.target
+
+[Service]
+# 运行此服务的用户
+User=www-data
+# 运行此服务的组
+Group=www-data
+# 服务的工作目录，即您的 Flask 项目根目录
+WorkingDirectory=/opt/aetherserve
+# 启动命令：执行 Gunicorn 启动脚本
+ExecStart=/bin/bash /opt/aetherserve/gunicorn_start.sh
+# 重新加载服务的命令 (向主进程发送 HUP 信号)
+ExecReload=/bin/kill -HUP $MAINPID
+# 进程终止模式，mixed 允许 worker 优雅关闭
+KillMode=mixed
+# 停止服务的超时时间
+TimeoutStopSec=5
+# 为服务提供私有 /tmp 目录，增强安全性
+PrivateTmp=true
+# 崩溃时自动重启服务
+Restart=on-failure
+# 重启前的等待时间
+RestartSec=5s
+
+# 设置环境变量，这是将 FILE_SERVER_ROOT_DIR 传递给 Flask 应用的关键
+# 请将 /mnt/your_aetherserve_data 替换为您希望 AetherServe 实际服务的文件根目录的绝对路径
+# 确保 www-data 用户对该目录有读取权限
+Environment="FILE_SERVER_ROOT_DIR=/mnt/your_aetherserve_data"
+# Environment="SECRET_KEY=YOUR_PRODUCTION_SECRET_KEY_HERE" # 也可以在这里设置 SECRET_KEY
+
+[Install]
+# 告诉 Systemd 此服务应在 multi-user.target 启动时激活
+WantedBy=multi-user.target
