@@ -78,8 +78,8 @@
                 </td>
                 <td class="t-time">{{ item.modified_time }}</td>
                 <td class="t-opt">
-                    <button class="btn btn-sm btn-outline-info copy-path-btn" data-path="{{ item.path }}" data-base-url="{{ base_url }}">
-                        <i class="fas fa-copy me-1"></i>复制
+                    <button class="btn btn-sm btn-outline-info copy-link-btn" data-copy-url="{{ item.full_url }}">
+                        <i class="fas fa-copy me-1"></i>复制链接
                     </button>
                     {% if not item.is_dir %} {# 所有文件都支持下载 #}
                         <a href="{{ url_for('download_file', file_path=item.path) }}" class="btn btn-sm btn-outline-success ms-2">

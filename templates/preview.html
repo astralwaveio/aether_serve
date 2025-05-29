@@ -6,8 +6,8 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h4><i class="fas fa-file-alt me-2"></i>预览文件: {{ file_name }}</h4>
     <div>
-        <button class="btn btn-sm btn-outline-info me-2 copy-path-btn" data-path="{{ file_path }}" data-base-url="{{ base_url }}">
-            <i class="fas fa-copy me-1"></i>复制完整路径
+        <button class="btn btn-sm btn-outline-info me-2 copy-link-btn" data-copy-url="{{ full_url }}">
+            <i class="fas fa-copy me-1"></i>复制下载链接
         </button>
         <button class="btn btn-primary me-2" id="copyContentBtn" data-content="{{ content }}">
             <i class="fas fa-copy me-1"></i>复制内容
@@ -61,7 +61,17 @@
         const textarea = document.createElement('textarea');
         textarea.value = text;
         textarea.style.position = 'fixed'; // 防止滚动
+        textarea.style.top = '0';
+        textarea.style.left = '0';
+        textarea.style.width = '2em';
+        textarea.style.height = '2em';
+        textarea.style.padding = '0';
+        textarea.style.border = 'none';
+        textarea.style.outline = 'none';
+        textarea.style.boxShadow = 'none';
+        textarea.style.background = 'transparent';
         document.body.appendChild(textarea);
+        textarea.focus();
         textarea.select();
         try {
             document.execCommand('copy');

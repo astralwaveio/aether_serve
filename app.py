@@ -2,7 +2,7 @@ import argparse
 import os
 import sys
 
-from flask import Flask, render_template, request, send_from_directory, abort
+from flask import Flask, render_template, request, send_from_directory, abort, url_for
 
 from config import Config
 # 导入文件操作和搜索工具模块
@@ -51,6 +51,15 @@ def browse(sub_path=''):
         current_path = sub_path.strip('/')
         items = file_operations.list_directory(current_path)
 
+        # 为每个项目添加完整的 URL
+        for item in items:
+            if item['is_dir']:
+                # 文件夹的完整 URL 是其浏览链接
+                item['full_url'] = url_for('browse', sub_path=item['path'], _external=True)
+            else:
+                # 文件的完整 URL 是其下载链接
+                item['full_url'] = url_for('download_file', file_path=item['path'], _external=True)
+
         # 构建面包屑导航
         breadcrumbs = []
         if current_path:
@@ -70,7 +79,7 @@ def browse(sub_path=''):
             items=items,
             breadcrumbs=breadcrumbs,
             parent_path=parent_path,
-            base_url=request.url_root  # 传递 base_url 到模板，用于复制完整路径
+            base_url=request.url_root  # 传递 base_url 到模板，用于其他需要的情况
         )
     except FileNotFoundError:
         # 如果文件或目录未找到，返回 404 错误
@@ -97,6 +106,9 @@ def preview(file_path):
         # 获取文件信息，用于显示文件名和大小
         file_info = file_operations.get_file_info(file_path)
 
+        # 为当前文件添加完整的下载 URL
+        file_info['full_url'] = url_for('download_file', file_path=file_path, _external=True)
+
         # 判断文件类型并渲染相应模板
         if file_operations.is_text_file(file_path):
             content, is_truncated = file_operations.read_text_file(file_path)
@@ -107,7 +119,8 @@ def preview(file_path):
                 file_size=file_info['size'],
                 content=content,
                 is_truncated=is_truncated,
-                base_url=request.url_root  # 传递 base_url 到模板
+                base_url=request.url_root,  # 传递 base_url 到模板
+                full_url=file_info['full_url']  # 传递完整 URL 到模板
             )
         elif file_operations.is_image_file(file_path):
             # 图片文件直接渲染图片预览模板
@@ -116,7 +129,8 @@ def preview(file_path):
                 file_path=file_path,
                 file_name=file_info['name'],
                 file_size=file_info['size'],
-                base_url=request.url_root  # 传递 base_url 到模板
+                base_url=request.url_root,  # 传递 base_url 到模板
+                full_url=file_info['full_url']  # 传递完整 URL 到模板
             )
         else:
             # 既不是文本也不是图片，则尝试下载
@@ -211,7 +225,14 @@ def search():
     results = []
     if query:
         try:
-            results = search_utils.search_files_globally(query)
+            raw_results = search_utils.search_files_globally(query)
+            # 为每个搜索结果添加完整的 URL
+            for item in raw_results:
+                if item['is_dir']:
+                    item['full_url'] = url_for('browse', sub_path=item['path'], _external=True)
+                else:
+                    item['full_url'] = url_for('download_file', file_path=item['path'], _external=True)
+            results = raw_results
         except Exception as e:
             # 记录搜索错误
             app.logger.error(f"全局搜索错误，查询: '{query}': {e}")
