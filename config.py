@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 # 从 .env 文件加载环境变量
 load_dotenv()
 
+
 class Config:
     """
     AetherServe 应用的配置类。
@@ -33,40 +34,27 @@ class Config:
         '.vue', '.scss', '.less', '.sgmodule'
     ]
 
-    # 可识别的图片文件扩展名列表，用于在线预览。
     IMAGE_FILE_EXTENSIONS = [
         '.jpg', '.jpeg', '.png', '.gif', '.bmp', '.svg', '.webp', '.ico'
     ]
 
     # 需要隐藏的文件或文件夹名称列表（支持通配符，如 '*.log' 或 'temp_*'）
-    # 这些项将不会在目录列表中显示。
-    # 示例：
-    # HIDDEN_ITEMS = ['.git', '.DS_Store', '__pycache__', '*.pyc', 'temp_files', 'my_secret_folder']
     HIDDEN_ITEMS = [
-        '.git',         # Git 版本控制目录
-        '.gitignore',   # Git 忽略文件
-        '.env',         # 环境变量文件
-        '__pycache__',  # Python 编译缓存目录
-        '*.pyc',        # Python 编译文件
-        'venv',         # Python 虚拟环境目录
-        'gunicorn_start.sh', # Gunicorn 启动脚本
-        'aetherserve.sock', # Gunicorn socket 文件
-        'config.py',    # 配置文件
-        'app.py',       # 主应用文件
-        'utils',        # 工具目录
-        'templates',    # 模板目录
-        'static',       # 静态文件目录
-        'requirements.txt', # 依赖文件
-        'README.md',    # README 文件
-        'pyproject.toml', # 项目配置
-        'dist'          # 打包输出目录
+        '.git',
+        '.github',
+        '.gitignore',
+        '.nojekyll',
+        '.prettierignore',
+        'LICENSE',
+        'favicon.ico',
+        '.hidden*',
+        'hidden_*',
+        '.DS_Store',
     ]
 
-    # 确保根目录存在，如果不存在则创建
     if not os.path.exists(FILE_SERVER_ROOT_DIR):
         try:
             os.makedirs(FILE_SERVER_ROOT_DIR)
-            print(f"Created FILE_SERVER_ROOT_DIR: {FILE_SERVER_ROOT_DIR}")
+            print(f"创建 FILE_SERVER_ROOT_DIR: {FILE_SERVER_ROOT_DIR}")
         except OSError as e:
-            print(f"Error creating FILE_SERVER_ROOT_DIR {FILE_SERVER_ROOT_DIR}: {e}")
-            # 如果创建失败，可能需要更严格的错误处理或退出
+            print(f"创建 FILE_SERVER_ROOT_DIR 失败: {FILE_SERVER_ROOT_DIR}: {e}")
