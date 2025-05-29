@@ -9,11 +9,11 @@ VENVDIR=$FLASKDIR/.venv
 # Gunicorn 用于与 Nginx 通信的 Unix socket 文件路径 (如果使用 TCP 端口，此变量将不再被 --bind 使用)
 SOCKFILE=$FLASKDIR/aetherserve.sock
 # 运行 Gunicorn 进程的用户 (通常与 Nginx 用户一致，以确保权限)
-USER=www-data
+USER=root
 # 运行 Gunicorn 进程的组
-GROUP=www-data
+GROUP=root
 # Gunicorn worker 进程数量 (推荐 2 * CPU核心数 + 1)
-NUM_WORKERS=3
+NUM_WORKERS=4
 # Flask 应用的启动点：模块名:应用实例名 (例如 app.py 中的 'app' 实例)
 # 假设 app.py 位于 /opt/aetherserve/app.py
 FLASKAPP=app:app
