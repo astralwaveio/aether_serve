@@ -42,6 +42,7 @@ class Config:
     HIDDEN_ITEMS = [
         '.git',
         '.github',
+        '.gitkeep',
         '.gitignore',
         '.nojekyll',
         '.prettierignore',
