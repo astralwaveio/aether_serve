@@ -163,6 +163,10 @@ main {
     height: 42px;
 }
 
+.home-icon {
+    width: 2.5rem;
+}
+
 pre {
     background-color: #2d2d2d; 
     padding: 1.25rem; 
