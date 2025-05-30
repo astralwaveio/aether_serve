@@ -177,9 +177,17 @@ code {
     line-height: 1.5;
 }
 
+.container .d-flex .d-flex a {
+    width: -webkit-fill-available;
+    height: fit-content;
+}
+
+.container .d-flex .d-flex input {
+    height: fit-content;
+}
 
 .btn {
-    border-radius: 0.375rem; 
+    border-radius: 0.375rem;
 }
 
 
