@@ -1,5 +1,3 @@
-
-
 body {
     display: flex;
     flex-direction: column;
@@ -8,17 +6,14 @@ body {
     background-color: #f8f9fa; 
     color: #343a40; 
 }
-
 main {
     flex: 1; 
     padding-top: 1.5rem; 
     padding-bottom: 1.5rem; 
 }
-
 .container-fluid{
     max-width: 1320px;
 }
-
 .navbar {
     
     height: 48px;
@@ -27,7 +22,6 @@ main {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); 
     align-items: center; 
 }
-
 .navbar-brand {
     font-weight: bold;
     font-size: 1.1rem; 
@@ -40,14 +34,12 @@ main {
     align-items: center;
     margin-right: 1rem; 
 }
-
 .navbar-nav .nav-item {
     
     height: 48px;
     display: flex;
     align-items: center;
 }
-
 .navbar-nav .nav-link {
     font-size: 0.9rem; 
     
@@ -58,7 +50,6 @@ main {
     display: flex; 
     align-items: center;
 }
-
 .navbar-toggler {
     
     height: 48px;
@@ -66,22 +57,17 @@ main {
     align-items: center;
     padding: 0 0.75rem; 
 }
-
-
 .navbar .d-flex {
     
     height: 48px;
     align-items: center;
 }
-
 .navbar .d-flex .btn-outline-light {
     width: 7.5rem;
     height: calc(48px - 0.6rem);
     margin-left: 0.75rem;
     margin-right: 0.75rem;
-
 }
-
 .navbar .form-control,
 .navbar .btn {
     font-size: 0.8rem;
@@ -89,9 +75,6 @@ main {
     padding: 0.3rem 0.75rem;
     height: calc(48px - 0.6rem); 
 }
-
-
-
 @media (max-width: 991.98px) { 
     .navbar {
         height: auto; 
@@ -126,47 +109,36 @@ main {
         padding: 0.375rem 0.75rem;
     }
 }
-
-
 .table {
     border-radius: 0.5rem;
     overflow: hidden; 
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); 
     margin-bottom: 1.5rem; 
 }
-
 .table-hover tbody tr:hover {
     background-color: #e9ecef; 
 }
-
 .table-striped tbody tr:nth-of-type(odd) {
     background-color: #f2f4f6; 
 }
-
 .table thead th {
     border-bottom: none; 
     padding: 0.5rem 0.5rem;
 }
-
 .table tbody td {
     padding: 0.5rem 0.5rem;
 }
-
-
 .toast {
     z-index: 1080; 
     border-radius: 0.5rem;
     box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
 }
-
 .table tr{
     height: 42px;
 }
-
 .home-icon {
     width: 2.5rem;
 }
-
 pre {
     background-color: #2d2d2d; 
     padding: 1.25rem; 
@@ -174,32 +146,24 @@ pre {
     overflow-x: auto; 
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); 
 }
-
 code {
     font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace; 
     font-size: 0.875rem; 
     line-height: 1.5;
 }
-
 .container .d-flex .d-flex a {
     width: -webkit-fill-available;
     height: fit-content;
 }
-
 .container .d-flex .d-flex input {
     height: fit-content;
 }
-
 .btn {
     border-radius: 0.375rem;
 }
-
-
 .form-control {
     border-radius: 0.375rem;
 }
-
-
 .navbar .btn-outline-light {
     border-color: rgba(255, 255, 255, 0.5);
     color: rgba(255, 255, 255, 0.75);
@@ -208,64 +172,47 @@ code {
     background-color: rgba(255, 255, 255, 0.1);
     color: #fff;
 }
-
-
 .text-decoration-none.text-dark {
     color: #343a40 !important; 
 }
 .text-decoration-none.text-dark:hover {
     text-decoration: underline !important;
 }
-
-
 .card, .alert {
     border-radius: 0.5rem;
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); 
 }
-
-
 .footer {
     background-color: #e9ecef; 
     border-top: 1px solid #dee2e6; 
     box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.03); 
     padding: 1rem 0; 
 }
-
-
 td i.fas {
     width: 1.25rem; 
     text-align: center;
     margin-right: 0.5rem; 
 }
-
-
 h1, h2, h3, h4, h5, h6 {
     font-weight: 600; 
 }
-
-
 .btn + .btn {
     margin-left: 0.75rem; 
 }
-
-
 .card-body img.img-fluid {
     display: block;
     margin: 0 auto;
     max-width: 100%;
     height: auto;
 }
-
 .table-dark th  {
     width: 15%
 }
-
 .me-2 {
     width: -webkit-fill-available;
     height: 38px;
     margin-right: .5rem !important;
 }
-
 @media (max-width: 767.98px) { 
     main {
         padding-top: 1rem;
@@ -280,29 +227,21 @@ h1, h2, h3, h4, h5, h6 {
         padding: 0.25rem 0.5rem;
         font-size: 0.8rem;
     }
-
     .table {
         table-layout: fixed;
     }
-
     .table .t-size, .table .t-time,  .table .t-path {
         display: none;
     }
-
-
     .table .t-opt {
         display: inline-flex;
     }
-
-
     .table .t-opt i {
         display: none;
     }
-
     .table td, .table th {
         font-size: 0.875rem;
     }
-
     .navbar-brand {
         font-size: 1rem; 
     }
@@ -317,4 +256,16 @@ h1, h2, h3, h4, h5, h6 {
     .navbar .form-control.me-2 {
         margin-right: 0.5rem !important; 
     }
+    
+    .container .d-flex .d-flex{
+        display: contents;
+    }
+    
+    .container .d-flex .d-flex a {
+        margin: 8px;
+    }
+    .container .d-flex .d-flex input {
+      margin: 8px;
+    }
+    
 }
