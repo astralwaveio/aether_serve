@@ -248,6 +248,12 @@ h1, h2, h3, h4, h5, h6 {
     width: 15%
 }
 
+.me-2 {
+    width: -webkit-fill-available;
+    height: 38px;
+    margin-right: .5rem !important;
+}
+
 @media (max-width: 767.98px) { 
     main {
         padding-top: 1rem;
