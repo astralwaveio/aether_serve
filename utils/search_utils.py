@@ -1,5 +1,7 @@
 import os
+
 from flask import current_app
+
 
 def search_files_globally(keyword):
     """

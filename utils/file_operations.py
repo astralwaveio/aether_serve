@@ -1,9 +1,10 @@
+import fnmatch
 import os
 import stat
 from datetime import datetime
-from flask import current_app
+
 import magic
-import fnmatch
+from flask import current_app
 
 
 def _get_absolute_path(relative_path):
