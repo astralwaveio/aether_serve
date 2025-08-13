@@ -57,6 +57,9 @@ class Config:
         'macOS.conf',
         'Surfboard-Pro.conf',
         'Surfboard-Test.conf',
+        'config.y*',
+        'default.y*',
+        'clash-config.y*',
     ]
 
     if not os.path.exists(FILE_SERVER_ROOT_DIR):
